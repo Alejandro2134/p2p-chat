@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
     SequelizeModule.forRoot({
       autoLoadModels: true,
       dialect: 'mysql',
@@ -19,7 +20,6 @@ import { ConfigModule } from '@nestjs/config';
       models: [Message],
     }),
     MessagesModule,
-    ConfigModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],

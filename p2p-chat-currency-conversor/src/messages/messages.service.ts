@@ -4,8 +4,7 @@ import { HttpService } from '@nestjs/axios';
 import { InjectModel } from '@nestjs/sequelize';
 import { Message } from './models/message.model';
 import { lastValueFrom, map } from 'rxjs';
-
-const CURRENCY_API_KEY = process.env.CURRENCY_API_KEY || '';
+import { ConfigService } from '@nestjs/config';
 
 type currencyApiRes = {
   base: string;
@@ -18,6 +17,7 @@ export class MessagesService {
   constructor(
     private readonly httpService: HttpService,
     @InjectModel(Message) private messageModel: typeof Message,
+    private readonly configService: ConfigService,
   ) {}
 
   async create(createMessageDto: CreateMessageDto): Promise<CreateMessageDto> {
@@ -27,7 +27,7 @@ export class MessagesService {
       const currency = await lastValueFrom<currencyApiRes>(
         this.httpService
           .get(
-            `https://api.fastforex.io/convert?from=${from}&to=${to}&amount=${amount}&api_key=${CURRENCY_API_KEY}`,
+            `https://api.fastforex.io/convert?from=${from}&to=${to}&amount=${amount}&api_key=${this.configService.get('CURRENCY_API_KEY')}`,
           )
           .pipe(map((response) => response.data)),
       );
