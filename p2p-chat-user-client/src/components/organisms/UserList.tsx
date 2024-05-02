@@ -1,41 +1,27 @@
 import UserCard from "../molecules/UserCard";
 
-const Chats: { id: string; userName: string }[] = [
-  {
-    id: "1",
-    userName: "John Doe",
-  },
-  {
-    id: "2",
-    userName: "Daniel Alejandro",
-  },
-  {
-    id: "3",
-    userName: "Andres Cardenas",
-  },
-  {
-    id: "4",
-    userName: "Morita Molina",
-  },
-  {
-    id: "5",
-    userName: "Diego Maradona",
-  },
-  {
-    id: "6",
-    userName: "James Hetfield",
-  },
-  {
-    id: "7",
-    userName: "Oscar Perez",
-  },
-];
+type User = {
+  username: string;
+  id: string;
+};
 
-const UserList = () => {
+type Props = {
+  selectUser: (user: User) => void;
+  users: User[];
+};
+
+const UserList = ({ users, selectUser }: Props) => {
   return (
     <div className="flex flex-col overflow-y-auto w-auto">
-      {Chats.length !== 0 ? (
-        Chats.map((chat) => <UserCard key={chat.id} userName={chat.userName} />)
+      {users.length !== 0 ? (
+        users.map((user) => (
+          <UserCard
+            key={user.id}
+            userName={user.username}
+            selectUser={selectUser}
+            id={user.id}
+          />
+        ))
       ) : (
         <p className="text-lg">No chats available</p>
       )}
